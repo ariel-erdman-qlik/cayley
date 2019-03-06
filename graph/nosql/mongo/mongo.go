@@ -2,8 +2,10 @@ package mongo
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/base64"
 	"fmt"
+	"net"
 	"strings"
 	"time"
 
@@ -29,6 +31,27 @@ func init() {
 }
 
 func dialMongo(addr string, options graph.Options) (*mgo.Session, error) {
+	if strings.HasPrefix(addr, "mongodb://") && strings.Contains(addr, "ssl=true") { //full mongodb url with ssl=true option, mgo.v2 does not support this
+		//remove ssl=true from the connection string, and make sure extra characters are eliminated as well (only one of the following Replace calls should ever match)
+		addr = strings.Replace(addr, "ssl=true&", "", 1) //there is a following option, remove the trailing &
+		addr = strings.Replace(addr, "&ssl=true", "", 1) //there is a preceeding option, remove the leading &
+		addr = strings.Replace(addr, "?ssl=true", "", 1) //there are no other options
+
+		dialInfo, err := mgo.ParseURL(addr)
+
+		if err != nil {
+			return nil, err
+		}
+
+		//introduce a tlsConfig to allow connecting with ssl
+		tlsConfig := &tls.Config{}
+		dialInfo.DialServer = func(addr *mgo.ServerAddr) (net.Conn, error) {
+			conn, err := tls.Dial("tcp", addr.String(), tlsConfig)
+			return conn, err
+		}
+		return mgo.DialWithInfo(dialInfo)
+	}
+
 	if connVal, ok := options["session"]; ok {
 		if conn, ok := connVal.(*mgo.Session); ok {
 			return conn, nil
