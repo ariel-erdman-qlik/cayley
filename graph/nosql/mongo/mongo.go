@@ -29,6 +29,8 @@ func init() {
 }
 
 func dialMongo(addr string, options graph.Options) (*mgo.Session, error) {
+	fmt.Printf("\n!!Using my fork: %s \n\n", "ariel-erdman-qlik")
+
 	if connVal, ok := options["session"]; ok {
 		if conn, ok := connVal.(*mgo.Session); ok {
 			return conn, nil
