@@ -85,8 +85,10 @@ func dialMongo(addr string, options graph.Options) (*mgo.Session, error) {
 func dialDB(addr string, opt graph.Options) (*DB, error) {
 	sess, err := dialMongo(addr, opt)
 	if err != nil {
+		fmt.Printf("failed dialDB: %+v", err)
 		return nil, err
 	}
+	fmt.Printf("success dialDB: %+v", sess)
 	dbName, err := opt.StringKey("database_name", nosql.DefaultDBName)
 	if err != nil {
 		return nil, err
