@@ -2,8 +2,10 @@ package mongo
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/base64"
 	"fmt"
+	"net"
 	"strings"
 	"time"
 
@@ -31,34 +33,48 @@ func init() {
 func dialMongo(addr string, options graph.Options) (*mgo.Session, error) {
 	fmt.Printf("\n!!Using my fork: %s \n\n", "ariel-erdman-qlik")
 
-	if connVal, ok := options["session"]; ok {
-		if conn, ok := connVal.(*mgo.Session); ok {
-			return conn, nil
-		}
-	}
-	if strings.HasPrefix(addr, "mongodb://") || strings.ContainsAny(addr, `@/\`) {
-		// full mongodb url
-		return mgo.Dial(addr)
-	}
-	var dialInfo mgo.DialInfo
-	dialInfo.Addrs = strings.Split(addr, ",")
-	user, err := options.StringKey("username", "")
+	dialInfo, err := mgo.ParseURL(addr)
+
 	if err != nil {
 		return nil, err
 	}
-	if user != "" {
-		dialInfo.Username = user
-		dialInfo.Password, err = options.StringKey("password", "")
-		if err != nil {
-			return nil, err
-		}
+
+	//Below part is similar to above.
+	tlsConfig := &tls.Config{}
+	dialInfo.DialServer = func(addr *mgo.ServerAddr) (net.Conn, error) {
+		conn, err := tls.Dial("tcp", addr.String(), tlsConfig)
+		return conn, err
 	}
-	dbName, err := options.StringKey("database_name", nosql.DefaultDBName)
-	if err != nil {
-		return nil, err
-	}
-	dialInfo.Database = dbName
-	return mgo.DialWithInfo(&dialInfo)
+	return mgo.DialWithInfo(dialInfo)
+
+	// if connVal, ok := options["session"]; ok {
+	// 	if conn, ok := connVal.(*mgo.Session); ok {
+	// 		return conn, nil
+	// 	}
+	// }
+	// if strings.HasPrefix(addr, "mongodb://") || strings.ContainsAny(addr, `@/\`) {
+	// 	// full mongodb url
+	// 	return mgo.Dial(addr)
+	// }
+	// var dialInfo mgo.DialInfo
+	// dialInfo.Addrs = strings.Split(addr, ",")
+	// user, err := options.StringKey("username", "")
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// if user != "" {
+	// 	dialInfo.Username = user
+	// 	dialInfo.Password, err = options.StringKey("password", "")
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// }
+	// dbName, err := options.StringKey("database_name", nosql.DefaultDBName)
+	// if err != nil {
+	// 	return nil, err
+	// }
+	// dialInfo.Database = dbName
+	// return mgo.DialWithInfo(&dialInfo)
 }
 
 func dialDB(addr string, opt graph.Options) (*DB, error) {
