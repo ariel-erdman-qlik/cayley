@@ -14,6 +14,7 @@ require (
 	github.com/flimzy/testy v0.0.13 // indirect
 	github.com/fortytw2/leaktest v1.3.0 // indirect
 	github.com/fsouza/go-dockerclient v1.3.1
+	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8
 	github.com/go-kivik/couchdb v0.0.0-20180111170509-74d231fe4324
 	github.com/go-kivik/kivik v0.0.0-20180103162520-2a1f6b9dd407
 	github.com/go-kivik/kiviktest v1.1.2 // indirect

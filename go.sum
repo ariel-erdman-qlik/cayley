@@ -44,6 +44,8 @@ github.com/fsnotify/fsnotify v1.4.7 h1:IXs+QLmnXW2CcXuY+8Mzv/fWEsPGWxqefPtCP5CnV
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/fsouza/go-dockerclient v1.3.1 h1:h0SaeiAGihssk+aZeKohbubHYKroCBlC7uuUyNhORI4=
 github.com/fsouza/go-dockerclient v1.3.1/go.mod h1:IN9UPc4/w7cXiARH2Yg99XxUHbAM+6rAi9hzBVbkWRU=
+github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8 h1:DujepqpGd1hyOd7aW59XpK7Qymp8iy83xq74fLr21is=
+github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8/go.mod h1:xkRDCp4j0OGD1HRkm4kmhM+pmpv3AKq5SU7GMg4oO/Q=
 github.com/go-kivik/couchdb v0.0.0-20180111170509-74d231fe4324 h1:TRT5ex9WhbvZPNPMfwkwS4yy4uJ9PLB5Wmu8wfQU1i4=
 github.com/go-kivik/couchdb v0.0.0-20180111170509-74d231fe4324/go.mod h1:5XJRkAMpBlEVA4q0ktIZjUPYBjoBmRoiWvwUBzP3BOQ=
 github.com/go-kivik/kivik v0.0.0-20180103162520-2a1f6b9dd407 h1:B6BQKxGjvBhytw850NYJsVQKEz4QOsgPOjgNErPTRRk=
